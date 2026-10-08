@@ -1,0 +1,31 @@
+fin-obra: "12/06/2025"
+pagadores:
+  - nombre: Promotora
+    tipo: constructora
+  - nombre: Ana
+    tipo: vecino
+    fecha-compra: "01/06/2025"
+    fecha-alta-luz: "01/07/2025"
+    fecha-alta-agua: "01/07/2025"
+    coeficiente: 60
+  - nombre: Bruno
+    tipo: vecino
+    fecha-compra: "15/06/2025"
+    fecha-alta-luz: "01/08/2025"
+    fecha-alta-agua: "01/08/2025"
+    coeficiente: 40
+facturas:
+  - nombre: Comunidad-junio
+    tipo: comunidad
+    otros: 100
+    ventana-temporal: {desde: "01/06/2025", hasta: "30/06/2025"}
+  - nombre: Luz-julio
+    tipo: luz
+    consumo: 93
+    otros: 31
+    ventana-temporal: {desde: "01/07/2025", hasta: "31/07/2025"}
+  - nombre: Luz-septiembre
+    tipo: luz
+    consumo: 60
+    otros: 30
+    ventana-temporal: {desde: "01/09/2025", hasta: "30/09/2025"}

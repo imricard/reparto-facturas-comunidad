@@ -1,0 +1,181 @@
+fin-obra: "12/06/2025"
+pagadores:
+  - nombre: Promotora
+    tipo: constructora
+  - nombre: Bajos-1
+    tipo: vecino
+    fecha-compra: "15/04/2025"
+    fecha-alta-luz: "20/09/2025"
+    fecha-alta-agua: "17/06/2025"
+    coeficiente: 18.65
+  - nombre: Bajos-2
+    tipo: vecino
+    fecha-compra: "08/07/2025"
+    fecha-alta-luz: "09/08/2025"
+    fecha-alta-agua: "09/07/2025"
+    coeficiente: 18.65
+  - nombre: Primero
+    tipo: vecino
+    fecha-compra: "07/07/2025"
+    fecha-alta-luz: "31/07/2025"
+    fecha-alta-agua: "09/07/2025"
+    coeficiente: 14.16
+  - nombre: Segundo
+    tipo: vecino
+    fecha-compra: "12/06/2025"
+    fecha-alta-luz: "30/07/2025"
+    fecha-alta-agua: "11/06/2025"
+    coeficiente: 14.53
+  - nombre: Tercero
+    tipo: vecino
+    fecha-compra: "27/06/2025"
+    fecha-alta-luz: "08/08/2025"
+    fecha-alta-agua: "30/06/2025"
+    coeficiente: 14.61
+  - nombre: Cuarto
+    tipo: vecino
+    fecha-compra: "17/06/2025"
+    fecha-alta-luz: "20/08/2025"
+    fecha-alta-agua: "25/06/2025"
+    coeficiente: 19.4
+facturas:
+  # --- Aigües de Barcelona (agua): consumo = Subministrament d'aigua;
+  #     otros = cànon + IVA + càrrecs i abonaments + taxa TMTR ---
+  - nombre: Agua-abr-mai
+    tipo: agua
+    consumo: 38.38
+    otros: 0.83
+    ventana-temporal: {desde: "24/04/2025", hasta: "15/05/2025"}
+
+  # --- Musa (arrendamiento equipo de medida de agua): coste fijo, sin
+  #     consumo; se trata como "agua" para repartirse junto al resto de
+  #     la factura estructural del servicio ---
+  - nombre: Equip-mesura-aigua-2025
+    tipo: agua
+    otros: 58.91
+    ventana-temporal: {desde: "15/05/2025", hasta: "14/05/2026"}
+
+  - nombre: Agua-mai-jun
+    tipo: agua
+    consumo: 17.63
+    otros: 77.29
+    ventana-temporal: {desde: "15/05/2025", hasta: "21/06/2025"}
+
+  - nombre: Agua-jun-ago
+    tipo: agua
+    consumo: 14.18
+    otros: 18.37
+    ventana-temporal: {desde: "21/06/2025", hasta: "22/08/2025"}
+
+  # --- Endesa (luz): consumo = Energia; otros = potència + descomptes +
+  #     altres + costos de distribuïdora + impostos ---
+  - nombre: Luz-jun-jul
+    tipo: luz
+    consumo: 192.99
+    otros: 474.99
+    ventana-temporal: {desde: "27/06/2025", hasta: "31/07/2025"}
+
+  # --- Ascensors Soler (mantenimiento): factura puntual de un trimestre,
+  #     sin ventana real; se modela como un único día (el de emisión) ---
+  - nombre: Manteniment-ascensor-3T2025
+    tipo: mantenimiento
+    otros: 209.73
+    ventana-temporal: {desde: "30/07/2025", hasta: "30/07/2025"}
+
+  - nombre: Manteniment-ascensor-4T2025
+    tipo: mantenimiento
+    otros: 314.6
+    ventana-temporal: {desde: "03/10/2025", hasta: "03/10/2025"}
+
+  - nombre: Luz-jul-ago
+    tipo: luz
+    consumo: 105.08
+    otros: 107.31
+    ventana-temporal: {desde: "31/07/2025", hasta: "31/08/2025"}
+
+  - nombre: Agua-ago-oct
+    tipo: agua
+    consumo: 14.18
+    otros: 18.37
+    ventana-temporal: {desde: "22/08/2025", hasta: "22/10/2025"}
+
+  - nombre: Luz-ago-set
+    tipo: luz
+    consumo: 67.09
+    otros: 96.62
+    ventana-temporal: {desde: "31/08/2025", hasta: "30/09/2025"}
+
+  - nombre: Luz-set-oct
+    tipo: luz
+    consumo: 47.23
+    otros: 95.26
+    ventana-temporal: {desde: "30/09/2025", hasta: "31/10/2025"}
+
+  # --- Ajuntament de Badalona (taxa de residus): 5 recibos de 100 €,
+  #     uno por unidad del edificio (004-1, 003-1, 002-1, BJ-2, BJ-1),
+  #     todos emitidos el mismo día ---
+  - nombre: Residus-004-1
+    tipo: residus
+    otros: 100.00
+    ventana-temporal: {desde: "03/10/2025", hasta: "03/10/2025"}
+
+  - nombre: Residus-003-1
+    tipo: residus
+    otros: 100.00
+    ventana-temporal: {desde: "03/10/2025", hasta: "03/10/2025"}
+
+  - nombre: Residus-002-1
+    tipo: residus
+    otros: 100.00
+    ventana-temporal: {desde: "03/10/2025", hasta: "03/10/2025"}
+
+  - nombre: Residus-BJ-2
+    tipo: residus
+    otros: 100.00
+    ventana-temporal: {desde: "03/10/2025", hasta: "03/10/2025"}
+
+  - nombre: Residus-BJ-1
+    tipo: residus
+    otros: 100.00
+    ventana-temporal: {desde: "03/10/2025", hasta: "03/10/2025"}
+
+  - nombre: Luz-oct-nov
+    tipo: luz
+    consumo: 28.63
+    otros: 88.61
+    ventana-temporal: {desde: "31/10/2025", hasta: "30/11/2025"}
+
+  - nombre: Equip-mesura-aigua-dic2025
+    tipo: agua
+    otros: 43.97
+    ventana-temporal: {desde: "08/12/2025", hasta: "07/12/2026"}
+  
+  - nombre: Luz-dic
+    tipo: luz
+    consumo: 1.84
+    otros: 5.67
+    ventana-temporal: {desde: "29/12/2025", hasta: "31/12/2025"}
+
+  - nombre: Luz-nov-dic
+    tipo: luz
+    consumo: 28.12
+    otros: 85.75
+    ventana-temporal: {desde: "30/11/2025", hasta: "29/12/2025"}
+  
+  - nombre: Agua-oct-des
+    tipo: agua
+    consumo: 14.18
+    otros: 13.45
+    ventana-temporal: {desde: "22/10/2025", hasta: "22/12/2025"}
+
+  - nombre: Luz-dic-ene
+    tipo: luz
+    consumo: 30.98
+    otros: 91.9
+    ventana-temporal: {desde: "31/12/2025", hasta: "31/01/2026"}
+
+  - nombre: Agua-des-feb
+    tipo: agua
+    consumo: 14.18
+    otros: 13.12
+    ventana-temporal: {desde: "22/10/2025", hasta: "22/12/2025"}
