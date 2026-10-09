@@ -15,6 +15,23 @@ La entrada puede ser un fichero `.json`, `.yaml` o `.yml` (ver
 `test/fixtures/escenario_valido.yaml` para un ejemplo completo con el
 formato de fechas `dd/mm/aaaa`).
 
+Una factura puede asignarse íntegramente a un único vecino (p. ej. una tasa
+de residuos que corresponde solo a su vivienda) añadiendo `asignado-a` con
+su nombre:
+
+```yaml
+- nombre: Residus-piso-Bruno
+  tipo: residus
+  otros: 100
+  ventana-temporal: {desde: "03/10/2025", hasta: "03/10/2025"}
+  asignado-a: Bruno
+```
+
+Esa factura la paga él solo, al 100 %, sin tener en cuenta coeficiente,
+fecha de compra ni fecha de alta: ni el resto de vecinos ni la constructora
+pagan nada de ella, y (si es de luz o agua) tampoco se usa para estimar el
+consumo comunitario de referencia.
+
 ## Estructura del código
 
 - `internal/periodo`  — intervalos de días naturales (ventanas de factura).
@@ -37,6 +54,8 @@ formato de fechas `dd/mm/aaaa`).
 
 ## Lógica de reparto (resumen)
 
+0. Si la factura tiene `asignado-a`, la paga íntegramente ese vecino y el
+   resto de reglas no se aplican (ver más arriba).
 1. Hasta la fecha de fin de obra (incluida), todo el importe lo asume la
    constructora; ningún día anterior cuenta para ningún vecino.
 2. Cada factura se descompone en componentes. Las que no son de luz/agua

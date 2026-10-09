@@ -29,3 +29,10 @@ facturas:
     consumo: 60
     otros: 30
     ventana-temporal: {desde: "01/09/2025", hasta: "30/09/2025"}
+  # Tasa de residuos del piso de Bruno: la paga él solo, no se reparte con
+  # Ana ni con la constructora.
+  - nombre: Residus-piso-Bruno
+    tipo: residus
+    otros: 100
+    ventana-temporal: {desde: "03/10/2025", hasta: "03/10/2025"}
+    asignado-a: Bruno

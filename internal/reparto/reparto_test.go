@@ -340,3 +340,96 @@ func abs2(x float64) float64 {
 	}
 	return x
 }
+
+// --- Facturas asignadas directamente a un vecino ---
+
+func TestFacturaAsignadaLaPagaIntegramenteEseVecinoYNadieMas(t *testing.T) {
+	e := escenarioBase(t)
+	// Una factura de tasa de residuos que corresponde solo al piso de B.
+	e.Facturas = append(e.Facturas, modelo.Factura{
+		Nombre:    "Residus-piso-B",
+		Tipo:      "residus",
+		Importe:   modelo.Importe{Otros: 100},
+		Ventana:   vent(t, d(2025, 10, 3), d(2025, 10, 3)),
+		AsignadoA: "B",
+	})
+	res, err := Calcular(e)
+	if err != nil {
+		t.Fatal(err)
+	}
+	pago := pagoDeTest(res, "Residus-piso-B")
+
+	if got := pago.ImporteDe("B"); got != 100 {
+		t.Fatalf("B debería pagar el importe íntegro: got=%.2f", got)
+	}
+	if got := pago.ImporteDe("A"); got != 0 {
+		t.Fatalf("A no debería pagar nada de una factura asignada a B: got=%.2f", got)
+	}
+	if got := pago.ImporteDe("Promotora"); got != 0 {
+		t.Fatalf("la constructora no debería pagar nada de una factura asignada a un vecino: got=%.2f", got)
+	}
+}
+
+func TestFacturaAsignadaValeIndependientementeDeLaFechaDeCompraYAlta(t *testing.T) {
+	e := escenarioBase(t)
+	// B compra el 15/06 y da de alta la luz el 1/08; la factura asignada es
+	// de antes de ambas fechas y, aun así, la paga él íntegramente.
+	e.Facturas = append(e.Facturas, modelo.Factura{
+		Nombre:    "Tasa-anterior",
+		Tipo:      "residus",
+		Importe:   modelo.Importe{Otros: 50},
+		Ventana:   vent(t, d(2025, 1, 1), d(2025, 1, 1)),
+		AsignadoA: "B",
+	})
+	res, err := Calcular(e)
+	if err != nil {
+		t.Fatal(err)
+	}
+	pago := pagoDeTest(res, "Tasa-anterior")
+	if got := pago.ImporteDe("B"); got != 50 {
+		t.Fatalf("B debería pagar el importe íntegro aunque sea anterior a su compra/alta: got=%.2f", got)
+	}
+}
+
+func TestFacturaAsignadaDeSuministroNoContaminaLaReferenciaComunitaria(t *testing.T) {
+	e := escenarioBase(t)
+	// Factura de luz asignada íntegramente a A con un consumo disparatado:
+	// si contaminara la referencia, el consumo comunitario estimado se
+	// dispararía y afectaría al resto de facturas de luz.
+	e.Facturas = append(e.Facturas, modelo.Factura{
+		Nombre:    "Luz-piso-A-asignada",
+		Tipo:      modelo.TipoLuz,
+		Importe:   modelo.Importe{Consumo: 999, Otros: 0},
+		Ventana:   vent(t, d(2025, 9, 1), d(2025, 9, 30)),
+		AsignadoA: "A",
+	})
+	res, err := Calcular(e)
+	if err != nil {
+		t.Fatal(err)
+	}
+	// La referencia de luz debe seguir basándose solo en "Luz-sep" (60€ en
+	// 30 días = 2€/día), no en la factura asignada de 999€.
+	var ref Referencia
+	for _, r := range res.Referencias {
+		if r.Servicio == modelo.TipoLuz {
+			ref = r
+		}
+	}
+	if ref.EurosPorDia > 3 {
+		t.Fatalf("la referencia no debería verse afectada por la factura asignada: %.4f €/día, facturas=%v",
+			ref.EurosPorDia, ref.Facturas)
+	}
+	for _, nombre := range ref.Facturas {
+		if nombre == "Luz-piso-A-asignada" {
+			t.Fatalf("la factura asignada no debería usarse como referencia: %v", ref.Facturas)
+		}
+	}
+
+	pago := pagoDeTest(res, "Luz-piso-A-asignada")
+	if got := pago.ImporteDe("A"); got != 999 {
+		t.Fatalf("A debería pagar el importe íntegro de su factura asignada: got=%.2f", got)
+	}
+	if got := pago.ImporteDe("B"); got != 0 {
+		t.Fatalf("B no debería pagar nada de la factura asignada a A: got=%.2f", got)
+	}
+}

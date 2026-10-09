@@ -92,7 +92,9 @@ func nuevaReferencia(e modelo.Escenario, servicio string) (Referencia, error) {
 	var consumo float64
 	var dias int
 	for _, f := range e.Facturas {
-		if f.Tipo == servicio && ref.esDeReferencia(f) {
+		// Una factura asignada íntegramente a un vecino no representa
+		// consumo comunitario: se excluye de la media de referencia.
+		if f.Tipo == servicio && !f.EsAsignada() && ref.esDeReferencia(f) {
 			consumo += f.Importe.Consumo
 			dias += f.Ventana.NumDias()
 			ref.Facturas = append(ref.Facturas, f.Nombre)

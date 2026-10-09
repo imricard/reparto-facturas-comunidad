@@ -59,6 +59,12 @@ func Calcular(e modelo.Escenario) (Resultado, error) {
 // repartirFactura reparte una factura sumando lo que corresponde a cada
 // vecino en cada uno de sus componentes.
 func repartirFactura(e modelo.Escenario, f modelo.Factura, refs referencias) modelo.Pago {
+	if f.EsAsignada() {
+		// Asignada por completo a un vecino: ni el resto de vecinos ni la
+		// constructora asumen nada de ella.
+		return construirPago(e, f, map[string]float64{f.AsignadoA: f.Importe.Total()})
+	}
+
 	vecinos := e.Vecinos()
 	dias := f.Ventana.Dias()
 	primerDia := e.PrimerDiaReparto()

@@ -150,3 +150,34 @@ func TestValidarAcumulaVariosErrores(t *testing.T) {
 		t.Fatalf("Validar debe informar de todos los problemas: %v", err)
 	}
 }
+
+func TestEsAsignada(t *testing.T) {
+	if (Factura{}).EsAsignada() {
+		t.Error("sin AsignadoA no debería estar asignada")
+	}
+	if !(Factura{AsignadoA: "Cuarto"}).EsAsignada() {
+		t.Error("con AsignadoA debería estar asignada")
+	}
+}
+
+func TestValidarAsignadoA(t *testing.T) {
+	e := escenarioValido(t)
+	e.Facturas[0].AsignadoA = "A" // "A" es un vecino real del escenario
+	if err := e.Validar(); err != nil {
+		t.Fatalf("asignar a un vecino existente debería ser válido: %v", err)
+	}
+
+	e2 := escenarioValido(t)
+	e2.Facturas[0].AsignadoA = "Quien-no-existe"
+	err := e2.Validar()
+	if err == nil || !strings.Contains(err.Error(), "no es ningún vecino") {
+		t.Fatalf("asignar a alguien que no es vecino debería fallar: %v", err)
+	}
+
+	e3 := escenarioValido(t)
+	e3.Facturas[0].AsignadoA = "Promo" // existe pero es la constructora, no un vecino
+	err = e3.Validar()
+	if err == nil || !strings.Contains(err.Error(), "no es ningún vecino") {
+		t.Fatalf("asignar a la constructora debería fallar: %v", err)
+	}
+}

@@ -43,7 +43,18 @@ type Factura struct {
 	Tipo    string
 	// Ventana es el periodo de facturación que cubre la factura.
 	Ventana periodo.Periodo
+	// AsignadoA, si no está vacío, es el nombre de un vecino que asume él
+	// solo el importe íntegro de la factura (p. ej. una tasa que
+	// corresponde a su vivienda en concreto). En ese caso la factura no se
+	// reparte por coeficiente ni se tiene en cuenta para estimar el
+	// consumo comunitario de referencia: ni el resto de vecinos ni la
+	// constructora pagan nada de ella.
+	AsignadoA string
 }
+
+// EsAsignada indica si la factura está asignada íntegramente a un único
+// vecino en lugar de repartirse entre todos.
+func (f Factura) EsAsignada() bool { return f.AsignadoA != "" }
 
 // EsSuministro indica si la factura es de un servicio (luz o agua) que cada
 // vecino debe dar de alta y cuyo consumo se separa en comunitario e

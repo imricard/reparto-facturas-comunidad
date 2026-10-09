@@ -51,3 +51,35 @@ func TestLeerFicheroInexistente(t *testing.T) {
 		t.Fatal("quería un error por fichero inexistente")
 	}
 }
+
+func TestLeerAsignadoA(t *testing.T) {
+	e, err := Leer(filepath.Join("..", "..", "test", "fixtures", "escenario_valido.yaml"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var encontrada bool
+	for _, f := range e.Facturas {
+		if f.Nombre == "Residus-piso-Bruno" {
+			encontrada = true
+			if f.AsignadoA != "Bruno" {
+				t.Fatalf("AsignadoA = %q, quería \"Bruno\"", f.AsignadoA)
+			}
+			if !f.EsAsignada() {
+				t.Fatal("la factura debería considerarse asignada")
+			}
+		}
+	}
+	if !encontrada {
+		t.Fatal("no se encontró la factura Residus-piso-Bruno")
+	}
+	// El resto de facturas, sin el campo, no deben quedar marcadas como
+	// asignadas por error.
+	for _, f := range e.Facturas {
+		if f.Nombre != "Residus-piso-Bruno" && f.EsAsignada() {
+			t.Fatalf("%s no debería estar asignada: AsignadoA=%q", f.Nombre, f.AsignadoA)
+		}
+	}
+	if err := e.Validar(); err != nil {
+		t.Fatalf("el escenario con asignado-a debería seguir siendo válido: %v", err)
+	}
+}
