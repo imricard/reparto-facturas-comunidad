@@ -65,6 +65,9 @@ type factura struct {
 	Consumo float64 `json:"consumo" yaml:"consumo"`
 	Otros   float64 `json:"otros" yaml:"otros"`
 	Ventana ventana `json:"ventana-temporal" yaml:"ventana-temporal"`
+	// AsignadoA es opcional: el nombre de un vecino que asume él solo el
+	// importe íntegro de esta factura, sin repartirla con el resto.
+	AsignadoA string `json:"asignado-a,omitempty" yaml:"asignado-a,omitempty"`
 }
 
 type pagador struct {
@@ -123,10 +126,11 @@ func aEscenario(doc documento) (modelo.Escenario, error) {
 			return modelo.Escenario{}, fmt.Errorf("factura %q: %w", f.Nombre, err)
 		}
 		e.Facturas = append(e.Facturas, modelo.Factura{
-			Nombre:  f.Nombre,
-			Tipo:    f.Tipo,
-			Importe: modelo.Importe{Consumo: f.Consumo, Otros: f.Otros},
-			Ventana: p,
+			Nombre:    f.Nombre,
+			Tipo:      f.Tipo,
+			Importe:   modelo.Importe{Consumo: f.Consumo, Otros: f.Otros},
+			Ventana:   p,
+			AsignadoA: f.AsignadoA,
 		})
 	}
 

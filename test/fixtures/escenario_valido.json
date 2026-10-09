@@ -51,6 +51,16 @@
         "desde": "01/09/2025",
         "hasta": "30/09/2025"
       }
+    },
+    {
+      "nombre": "Residus-piso-Bruno",
+      "tipo": "residus",
+      "otros": 100,
+      "ventana-temporal": {
+        "desde": "03/10/2025",
+        "hasta": "03/10/2025"
+      },
+      "asignado-a": "Bruno"
     }
   ]
 }

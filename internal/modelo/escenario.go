@@ -93,6 +93,10 @@ func (e Escenario) Validar() error {
 func (e Escenario) validarFacturas() []error {
 	var errs []error
 	vistos := map[string]bool{}
+	esVecino := map[string]bool{}
+	for _, v := range e.Vecinos() {
+		esVecino[v.Nombre] = true
+	}
 	for i, f := range e.Facturas {
 		etiqueta := fmt.Sprintf("factura #%d (%q)", i+1, f.Nombre)
 		switch {
@@ -107,6 +111,10 @@ func (e Escenario) validarFacturas() []error {
 		}
 		if f.Ventana.EsCero() {
 			errs = append(errs, fmt.Errorf("%s: falta la ventana temporal", etiqueta))
+		}
+		if f.EsAsignada() && !esVecino[f.AsignadoA] {
+			errs = append(errs, fmt.Errorf("%s: asignado-a %q no es ningún vecino del escenario",
+				etiqueta, f.AsignadoA))
 		}
 		partes := []struct {
 			nombre string

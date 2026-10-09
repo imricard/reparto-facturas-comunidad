@@ -143,6 +143,13 @@ func (t *reportTemplate) desglosePorFactura(d Datos) {
 		pdf.CellFormat(0, 5.5,
 			"Importe: consumo "+euros(f.Importe.Consumo)+" + otros "+euros(f.Importe.Otros)+" = total "+euros(f.Importe.Total()),
 			"", 1, "L", false, 0, "")
+		if f.EsAsignada() {
+			pdf.SetFont(familiaFuente, "I", 9)
+			pdf.CellFormat(0, 5.5,
+				"Factura asignada íntegramente a "+f.AsignadoA+": no se reparte con el resto de vecinos ni con la constructora.",
+				"", 1, "L", false, 0, "")
+			pdf.SetFont(familiaFuente, "", 9)
+		}
 
 		anchoNombre, anchoImporte := 90.0, 40.0
 		pdf.SetFont(familiaFuente, "B", 9)
